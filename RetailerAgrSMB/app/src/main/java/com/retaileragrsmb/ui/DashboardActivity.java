@@ -16,6 +16,10 @@ import com.retaileragrsmb.common.Constant;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String KEY_USER_TYPE = "user_type";
+    private String userType;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +36,9 @@ public class DashboardActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        openDashBoardFragment();
+        userType = getIntent().getStringExtra(KEY_USER_TYPE);
+
+        openDashBoardFragment(userType);
 
     }
 
@@ -46,16 +52,21 @@ public class DashboardActivity extends AppCompatActivity
         }
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.content_main_db);
-        if (f instanceof DashboardFragment){
+        if (f instanceof DashboardFragment || f instanceof DistributorDashboardFragment){
             finish();
         }else {
-            openDashBoardFragment();
+            openDashBoardFragment(userType);
         }
     }
 
-    private void openDashBoardFragment(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main_db, DashboardFragment.newInstance(),
-                Constant.FG_DASHBOARD).commitAllowingStateLoss();
+    private void openDashBoardFragment(String userType){
+        if(userType.equals(Constant.USER_DISTRIBUTOR) || userType.equals(Constant.USER_OPERATOR)){
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main_db, DistributorDashboardFragment.newInstance(),
+                    Constant.FG_DASHBOARD).commitAllowingStateLoss();
+        }else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main_db, DashboardFragment.newInstance(),
+                    Constant.FG_DASHBOARD).commitAllowingStateLoss();
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

@@ -17,6 +17,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.retaileragrsmb.ui.DashboardActivity.KEY_USER_TYPE;
+
 /**
  * Created by hitesh on 5/6/2017.
  */
@@ -50,10 +52,26 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter a valid password", Toast.LENGTH_SHORT).show();
         } else {
             //Login webservice call
+            String userType = null;
+            if(tvUsername.getText().toString().trim().equals("1234567891")){
+                userType = Constant.USER_DISTRIBUTOR;
+            } else if(tvUsername.getText().toString().trim().equals("1234567892")){
+                userType = Constant.USER_OPERATOR;
+            }else if(tvUsername.getText().toString().trim().equals("1234567893")){
+                userType = Constant.USER_RETAILER;
+            } else {
+                Toast.makeText(this, "Enter a valid user type.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+            intent.putExtra(KEY_USER_TYPE, userType);
+//            Bundle bundle = new Bundle();
+//            bundle.putString(KEY_USER_TYPE, userType);
+//            intent.putExtras(bundle);
             startActivity(intent);
             Utils.setPrefrence(this, Constant.KEY_IS_LOGIN, true);
+            Utils.setPrefrence(this, Constant.KEY_LOGIN_USER_TYPE, userType);
             finish();
         }
 

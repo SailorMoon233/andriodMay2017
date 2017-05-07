@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3G/4G Recharge"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_toLeftOf="@+id/tvAmount"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"/>
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/tvAmount"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="15dp"
+        android:textSize="12dp"
+        android:text="Unlimited Local+STD Airtel to Airtel mobile calls with 50 MB Data.For 4G Handset with 4G SIM,extra 1 GB.Validity 35 days."/>
+
+    <TextView
+        android:id="@+id/tvAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="400"
+        android:textSize="20dp"
+        android:textColor="#00BFFF"
+        android:textStyle="bold"
+        android:background="@drawable/amount_bg"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

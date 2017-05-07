@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#fafafa">
+
+    <EditText
+        android:id="@+id/tv_username"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        android:hint="Enter Username"
+        android:textColorHint="#A9A9A9"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:maxLength="10"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/user"
+        android:background="@drawable/border"
+        android:imeOptions="actionNext"
+        android:nextFocusDown="@+id/tv_password"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/tv_password"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        android:hint="Enter Password"
+        android:textColorHint="#A9A9A9"
+        android:gravity="center"
+        android:maxLength="4"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/password"
+        android:background="@drawable/border"
+        android:layout_marginTop="20dp"
+        android:inputType="number|numberPassword"
+        />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="#006DF0"
+        android:text="LOGIN"
+        android:textSize="20dp"
+        android:textColor="@android:color/white"
+        android:inputType="number"/>
+
+</LinearLayout>

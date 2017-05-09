@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -49,6 +50,11 @@ public class DistributorDashboardFragment extends Fragment{
     @BindView(R.id.btnSubmit)
     Button btnSubmit;
 
+    private int amountToTransfer;
+    private String selectedProduct;
+    private String selectedRetailer;
+    private int totalAvailableCount;
+
     private GetAmountService amountService;
     private ProgressDialog progress;
 
@@ -63,12 +69,19 @@ public class DistributorDashboardFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_distributor_dashboard, container, false);
         ButterKnife.bind(this, view);
 
+        initSelectListener();
         initSpinnerWithDummyData();
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Product Transferred successfully.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Product Transferred successfully.", Toast.LENGTH_SHORT).show();
+
+                if(totalAvailableCount < amountToTransfer){
+                    Toast.makeText(getActivity(), "You do not have sufficient product to transfer.", Toast.LENGTH_SHORT).show();
+                }else {
+                    transferAmount(String.valueOf(amountToTransfer));
+                }
             }
         });
 
@@ -81,7 +94,46 @@ public class DistributorDashboardFragment extends Fragment{
     public void onStart() {
         super.onStart();
 
-        getAmount();
+        getAvailableAmountFromServer();
+    }
+
+
+    private void initSelectListener(){
+        spinnerProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedProduct = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerAmount.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                amountToTransfer = Integer.parseInt((String) adapterView.getItemAtPosition(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerRetailers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedRetailer = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void initSpinnerWithDummyData(){
@@ -124,10 +176,10 @@ public class DistributorDashboardFragment extends Fragment{
         }
     }
 
-    private void getAmount() {
+    private void getAvailableAmountFromServer() {
         //binding.username.getText().toString()
         showLoadingDialog();
-        Call call = amountService.getAvailableAmount(Utils.getRequestBody());
+        Call call = amountService.getAvailableAmount(Utils.getAmountRequestBody());
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Response<JsonObject> response) {
@@ -137,7 +189,7 @@ public class DistributorDashboardFragment extends Fragment{
                 AmountResponseModel model = new Gson().fromJson(responseObject.toString(), AmountResponseModel.class);
 
                 if (model == null) {
-                    //404 or the response cannot be converted to User.
+                    //404 or the response cannot be converted to AmountResponseModel.
                     ResponseBody responseBody = response.errorBody();
                     if (responseBody != null) {
                         try {
@@ -152,6 +204,11 @@ public class DistributorDashboardFragment extends Fragment{
                     //200
                     if(model.getResult() != null && model.getResult().getMessage() != null)
                         amount.setText(model.getResult().getMessage());
+                    try{
+                        totalAvailableCount = Integer.parseInt(model.getResult().getMessage());
+                    }catch (NumberFormatException e){
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -164,25 +221,67 @@ public class DistributorDashboardFragment extends Fragment{
         });
     }
 
-
-
-
-
-    public void showLoadingDialog() {
+    private void showLoadingDialog() {
 
         if (progress == null) {
             progress = new ProgressDialog(getActivity());
 //            progress.setTitle(getString());
-          progress.setMessage("Loading");
+            progress.setMessage("Loading");
         }
         progress.show();
     }
 
-    public void dismissLoadingDialog() {
+    private void dismissLoadingDialog() {
 
         if (progress != null && progress.isShowing()) {
             progress.dismiss();
         }
+    }
+
+    private void transferAmount(String transferAmount) {
+        //binding.username.getText().toString()
+        showLoadingDialog();
+        Call call = amountService.transferAmount(Utils.getTransferAmountRequestBody(transferAmount));
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Response<JsonObject> response) {
+                dismissLoadingDialog();
+                JsonObject responseObject = response.body();
+
+                AmountResponseModel model = new Gson().fromJson(responseObject.toString(), AmountResponseModel.class);
+
+                if (model == null) {
+                    //404 or the response cannot be converted to AmountResponseModel.
+                    ResponseBody responseBody = response.errorBody();
+                    if (responseBody != null) {
+                        try {
+                            Toast.makeText(getActivity(), responseBody.string(), Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "Error occurs", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //200
+                    if(model.getResult() != null && model.getResult().getMessage() != null)
+                        if(totalAvailableCount >= amountToTransfer) {
+                            totalAvailableCount -= amountToTransfer;
+                            amount.setText(String.valueOf(totalAvailableCount));
+                        }
+
+                        Utils.showAlert(getActivity(),
+                                getString(R.string.dialog_title),
+                                String.format(getString(R.string.dialog_message), model.getResult().getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                dismissLoadingDialog();
+            }
+        });
     }
 
 }

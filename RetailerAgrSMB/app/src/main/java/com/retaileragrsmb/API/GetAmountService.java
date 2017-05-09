@@ -11,4 +11,7 @@ import retrofit2.http.POST;
 public interface GetAmountService {
     @POST("/chaincode")
     Call<JsonObject> getAvailableAmount(@Body JsonObject body);
+
+    @POST("/chaincode")
+    Call<JsonObject> transferAmount(@Body JsonObject body);
 }

@@ -5,4 +5,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="dialog_title">Transfer Successful</string>
+    <string name="dialog_message">Product transfer successfully to selected retailer.\n Note transaction id for your reference :-\n%s</string>
 </resources>

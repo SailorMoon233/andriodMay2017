@@ -96,13 +96,13 @@ public class Utils {
 
         JsonObject paramsObject = new JsonObject();
         paramsObject.addProperty("type", 1);
-        paramsObject.addProperty("secureContext", "WebAppAdmin");
+        paramsObject.addProperty("secureContext", "user_type1_1");
 
         JsonObject chaincodeIDObject = new JsonObject();
-        chaincodeIDObject.addProperty("name", "8171b74a650862f32a027dfa11d8859aa9d167cdb29847f3f76eaebea88165ef099a410d79add751ca189cb4c7946e69b152f89c3e3e696fc38aaff1b8934ddf");
+        chaincodeIDObject.addProperty("name", "a40048ff795ad37583812165b80a9f0de730bdd2e1f577293349acacbd594d114851533add4d33fe465452d0f93771f57ce39df6c3743311d206b7ba938cb6dd");
 
         JsonObject ctorMsgObject = new JsonObject();
-        ctorMsgObject.addProperty("function", "read");
+        ctorMsgObject.addProperty("function", "query");
         JsonArray array = new JsonArray();
         array.add("Distributer");
 
@@ -122,19 +122,19 @@ public class Utils {
 
         rootObject.addProperty("jsonrpc", "2.0");
         rootObject.addProperty("method", "invoke");
-        rootObject.addProperty("id", 3);
+        rootObject.addProperty("id", 1);
 
         JsonObject paramsObject = new JsonObject();
         paramsObject.addProperty("type", 1);
-        paramsObject.addProperty("secureContext", "user_type1_0");
+        paramsObject.addProperty("secureContext", "user_type1_1");
 
         JsonObject chaincodeIDObject = new JsonObject();
-        chaincodeIDObject.addProperty("name", "8171b74a650862f32a027dfa11d8859aa9d167cdb29847f3f76eaebea88165ef099a410d79add751ca189cb4c7946e69b152f89c3e3e696fc38aaff1b8934ddf");
+        chaincodeIDObject.addProperty("name", "a40048ff795ad37583812165b80a9f0de730bdd2e1f577293349acacbd594d114851533add4d33fe465452d0f93771f57ce39df6c3743311d206b7ba938cb6dd");
 
         JsonObject ctorMsgObject = new JsonObject();
-        ctorMsgObject.addProperty("function", "write");
+        ctorMsgObject.addProperty("function", "Invoke");
         JsonArray array = new JsonArray();
-        array.add("Idea_Products");
+        array.add("Idea");
         array.add("Distributer");
         array.add(amount);
 

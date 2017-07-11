@@ -2,6 +2,7 @@ package com.retaileragrsmb.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -53,14 +54,22 @@ public class DistributorDashboardFragment extends Fragment{
     private int amountToTransfer;
     private String selectedProduct;
     private String selectedRetailer;
-    private int totalAvailableCount;
+    private int totalAvailableCount = 50;
 
     private GetAmountService amountService;
     private ProgressDialog progress;
+    private Handler handler;
 
 
     public static DistributorDashboardFragment newInstance() {
         return new DistributorDashboardFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        handler = new Handler();
+
     }
 
     @Nullable
@@ -85,7 +94,7 @@ public class DistributorDashboardFragment extends Fragment{
             }
         });
 
-        this.amountService =  ServiceGenerator.createService(GetAmountService.class);
+        this.amountService =  ServiceGenerator.createDistributorService(GetAmountService.class);
 
         return view;
     }
@@ -245,12 +254,12 @@ public class DistributorDashboardFragment extends Fragment{
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Response<JsonObject> response) {
-                dismissLoadingDialog();
                 JsonObject responseObject = response.body();
 
                 AmountResponseModel model = new Gson().fromJson(responseObject.toString(), AmountResponseModel.class);
 
                 if (model == null) {
+                    dismissLoadingDialog();
                     //404 or the response cannot be converted to AmountResponseModel.
                     ResponseBody responseBody = response.errorBody();
                     if (responseBody != null) {
@@ -265,10 +274,16 @@ public class DistributorDashboardFragment extends Fragment{
                 } else {
                     //200
                     if(model.getResult() != null && model.getResult().getMessage() != null)
-                        if(totalAvailableCount >= amountToTransfer) {
-                            totalAvailableCount -= amountToTransfer;
-                            amount.setText(String.valueOf(totalAvailableCount));
-                        }
+//                        if(totalAvailableCount >= amountToTransfer) {
+//                            totalAvailableCount -= amountToTransfer;
+//                            amount.setText(String.valueOf(totalAvailableCount));
+//                        }
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getAvailableAmountFromServer();
+                            }
+                        }, 1000);
 
                         Utils.showAlert(getActivity(),
                                 getString(R.string.dialog_title),

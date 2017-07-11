@@ -3,14 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tv_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role : Retailer"
+        android:textSize="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textColor="#696969"/>
+
     <EditText
         android:id="@+id/et_Number"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/tv_role"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:maxLength="10"
+        android:hint="Enter number"
         android:inputType="number"/>
 
     <Spinner
@@ -33,6 +45,8 @@
         android:layout_marginTop="15dp"
         android:divider="#C0C0C0"
         android:dividerHeight="0.5dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="#666666"
         android:layout_below="@+id/spinner"
         android:layout_above="@+id/btnSubmit"
         android:layout_marginBottom="10dp"/>

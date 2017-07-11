@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.retaileragrsmb.R;
 import com.retaileragrsmb.model.RechargeModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,19 +31,21 @@ public class RechargeAdapter extends BaseAdapter {
 
     public RechargeAdapter(Context context, List<RechargeModel> rechargeList) {
         this.context = context;
-        this.rechargeList = rechargeList;
+        this.rechargeList = getDummyList();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-//        if(rechargeList != null)
-//            return rechargeList.size();
-        return 5;
+        if(rechargeList != null)
+            return rechargeList.size();
+        return 0;
     }
 
     @Override
     public Object getItem(int i) {
+        if(rechargeList != null)
+            return rechargeList.get(i);
         return null;
     }
 
@@ -61,8 +64,9 @@ public class RechargeAdapter extends BaseAdapter {
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
+        RechargeModel model = rechargeList.get(i);
 
-
+        holder.tvAmount.setText(String.valueOf(model.getAmount()));
 
         return convertView;
     }
@@ -79,5 +83,15 @@ public class RechargeAdapter extends BaseAdapter {
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    private List<RechargeModel> getDummyList(){
+        List<RechargeModel> rechargeList = new ArrayList<>();
+        for(int i = 1 ; i < 6 ; i++){
+            RechargeModel model = new RechargeModel();
+            model.setAmount(i * 10);
+            rechargeList.add(model);
+        }
+        return rechargeList;
     }
 }

@@ -5,21 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tv_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role : Distributor"
+        android:textSize="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textColor="#696969"/>
+
     <LinearLayout
         android:id="@+id/ll1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="15dp"
-        android:layout_marginTop="10dp"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:layout_below="@+id/tv_role">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="Available product : "
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textColor="@android:color/black"
             android:textStyle="bold"/>
 
@@ -51,7 +61,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Product, Amount and Retailer to transfer product "
-        android:textSize="20dp"
+        android:textSize="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textColor="@android:color/black"
         android:gravity="center"
         android:layout_below="@+id/line"/>
